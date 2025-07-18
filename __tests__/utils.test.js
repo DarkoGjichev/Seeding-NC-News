@@ -1,5 +1,6 @@
 const {
-  convertTimestampToDate
+  convertTimestampToDate,
+  createLookupRef,
 } = require("../db/seeds/utils");
 
 describe("convertTimestampToDate", () => {
@@ -38,3 +39,31 @@ describe("convertTimestampToDate", () => {
   });
 });
 
+describe("createLookupRef", () => {
+  test("returns an empty object when given an empty array", () => {
+    const result = createLookupRef([], "id", "name");
+    expect(result).toEqual({});
+  });
+  test("maps currentKey values to targetKey values", () => {
+    const input = [
+      { id: 1, name: "Alice" },
+      { id: 2, name: "Bob" },
+    ];
+    const result = createLookupRef(input, "id", "name");
+    expect(result).toEqual({
+      1: "Alice",
+      2: "Bob",
+    });
+  });
+  test("maps currentKey values to targetKey values when given multiple objects in an array", () => {
+    const input = [
+      { id: 1, name: "Alice" },
+      { id: 2, name: "Bob" },
+    ];
+    const result = createLookupRef(input, "id", "name");
+    expect(result).toEqual({
+      1: "Alice",
+      2: "Bob",
+    });
+  });
+});
