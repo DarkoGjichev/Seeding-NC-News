@@ -32,13 +32,12 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
     })
     .then(() => {
       const formattedData = articleData.map((article) => {
-        const convertedTimestamp = convertTimestampToDate(article);
         return [
           article.title,
           article.topic,
           article.author,
           article.body,
-          convertedTimestamp.created_at,
+          new Date(article.created_at),
           article.votes,
           article.article_img_url,
         ];
@@ -54,13 +53,12 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
     .then(({ rows: articles }) => {
       const ref = createLookupRef(articles, "title", "article_id");
       const formattedData = commentData.map((comment) => {
-        const convertedTimestamp = convertTimestampToDate(comment);
         return [
           ref[comment.article_title],
           comment.body,
           comment.votes,
           comment.author,
-          convertedTimestamp.created_at,
+          new Date(comment.created_at),
         ];
       });
       const commentsData = format(
