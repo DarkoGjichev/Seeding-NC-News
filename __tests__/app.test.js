@@ -83,3 +83,34 @@ describe("GET /api/users", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id", () => {
+  test("200: Returns an object with the key of article and the value of an article object.", () => {
+    const article_id = 1;
+    return request(app)
+      .get(`/api/articles/${article_id}`)
+      .then(({ body: { article } }) => {
+        expect(Object.keys(article)).toEqual([
+          "article_id",
+          "title",
+          "topic",
+          "author",
+          "body",
+          "created_at",
+          "votes",
+          "article_img_url",
+        ]);
+        expect(typeof article.article_id).toBe("number");
+        expect(typeof article.title).toBe("string");
+        expect(typeof article.topic).toBe("string");
+        expect(typeof article.author).toBe("string");
+        expect(typeof article.body).toBe("string");
+        expect(typeof article.created_at).toBe("string");
+        expect(typeof article.votes).toBe("number");
+        expect(typeof article.article_img_url).toBe("string");
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
+});
