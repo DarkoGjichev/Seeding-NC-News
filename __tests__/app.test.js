@@ -7,16 +7,35 @@ const data = require("../db/data/test-data");
 const request = require("supertest");
 /* Set up your beforeEach & afterAll functions here */
 beforeEach(() => seed(data));
-
 afterAll(() => db.end());
 
-describe("GET /api", () => {
-  test.skip("200: Responds with an object detailing the documentation for each endpoint", () => {
+describe.skip("GET /api", () => {
+  test("200: Responds with an object detailing the documentation for each endpoint", () => {
     return request(app)
       .get("/api")
       .expect(200)
       .then(({ body: { endpoints } }) => {
         expect(endpoints).toEqual(endpointsJson);
+      });
+  });
+});
+
+describe("GET /api/topics", () => {
+  test("200: Returns an object with the key of topics and the value of an array of topic objects.", () => {
+    return request(app)
+      .get("/api/topics")
+      .then(({ body: { topics } }) => {
+        expect(topics).toHaveLength(3);
+        topics.forEach((topic) => {
+          expect(Object.keys(topic)).toEqual([
+            "slug",
+            "description",
+            "img_url",
+          ]);
+        });
+      })
+      .catch((err) => {
+        if (err) throw err;
       });
   });
 });
