@@ -39,3 +39,27 @@ describe("GET /api/topics", () => {
       });
   });
 });
+
+describe("GET /api/articles", () => {
+  test("200: Returns an object with the key of articles and the value of an array of article objects", () => {
+    return request(app)
+      .get("/api/articles")
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(13);
+        articles.forEach((article) => {
+          expect(Object.keys(article)).toEqual([
+            "article_id",
+            "title",
+            "topic",
+            "author",
+            "created_at",
+            "votes",
+            "article_img_url",
+          ]);
+        });
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
+});
