@@ -63,3 +63,23 @@ describe("GET /api/articles", () => {
       });
   });
 });
+
+describe("GET /api/users", () => {
+  test("200: Returns an object with the key of users and the value of an array of objects.", () => {
+    return request(app)
+      .get("/api/users")
+      .then(({ body: { users } }) => {
+        expect(users).toHaveLength(4);
+        users.forEach((article) => {
+          expect(Object.keys(article)).toEqual([
+            "username",
+            "name",
+            "avatar_url",
+          ]);
+        });
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
+});
