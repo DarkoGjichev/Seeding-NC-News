@@ -117,9 +117,45 @@ describe("GET /api/articles/:article_id", () => {
     const article_id = 2000;
     return request(app)
       .get(`/api/articles/${article_id}`)
-      .then((res) => {
-        expect(res.status).toBe(404);
-        expect(res.body.message).toBe("Article not found");
+      .then(({ status, body: { message } }) => {
+        expect(status).toBe(404);
+        expect(message).toBe("Article not found");
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
+});
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("200: Returns an object with the key of article and the value of an article object", () => {
+    const article_id = 1;
+    return request(app)
+      .get(`/api/articles/${article_id}/comments`)
+      .then(({ body: { comments } }) => {
+        expect(comments).toHaveLength(11);
+        comments.forEach((comment) => {
+          expect(Object.keys(comment)).toEqual([
+            "comment_id",
+            "article_id",
+            "body",
+            "votes",
+            "author",
+            "created_at",
+          ]);
+        });
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
+  test("404: No comments found", () => {
+    const article_id = 2000;
+    return request(app)
+      .get(`/api/articles/${article_id}/comments`)
+      .then(({ status, body: { message } }) => {
+        expect(status).toBe(404);
+        expect(message).toBe("No comments not found");
       })
       .catch((err) => {
         if (err) throw err;
