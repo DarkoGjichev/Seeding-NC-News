@@ -113,4 +113,16 @@ describe("GET /api/articles/:article_id", () => {
         if (err) throw err;
       });
   });
+  test("404: Article does not exist", () => {
+    const article_id = 2000;
+    return request(app)
+      .get(`/api/articles/${article_id}`)
+      .then((res) => {
+        expect(res.status).toBe(404);
+        expect(res.body.message).toBe("Article not found");
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
 });
