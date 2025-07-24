@@ -171,3 +171,30 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: Returns the posted comment", () => {
+    const article_id = 1;
+    const newComment = {
+      username: "butter_bridge",
+      body: "Small text goes here...",
+    };
+    return request(app)
+      .post(`/api/articles/${article_id}/comments`)
+      .send(newComment)
+      .expect(201)
+      .then(({ body: { postedComment } }) => {
+        expect(Object.keys(postedComment)).toEqual([
+          "comment_id",
+          "article_id",
+          "body",
+          "votes",
+          "author",
+          "created_at",
+        ]);
+        expect(postedComment.comment_id).toBe(19);
+        expect(postedComment.article_id).toBe(1);
+        expect(postedComment.body).toBe("Small text goes here...");
+      });
+  });
+});
