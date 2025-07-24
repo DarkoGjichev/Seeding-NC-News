@@ -20,6 +20,17 @@ describe.skip("GET /api", () => {
   });
 });
 
+describe("*", () => {
+  test("ALL METHODS: Responds with a 404 not found message when a request is made to an endpoint that does't exist on the api", () => {
+    return request(app)
+      .get("/not-an-endpoint")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path Not Found");
+      });
+  });
+});
+
 describe("GET /api/topics", () => {
   test("200: Returns an object with the key of topics and the value of an array of topic objects.", () => {
     return request(app)
@@ -33,9 +44,6 @@ describe("GET /api/topics", () => {
             "img_url",
           ]);
         });
-      })
-      .catch((err) => {
-        if (err) throw err;
       });
   });
 });
@@ -57,9 +65,6 @@ describe("GET /api/articles", () => {
             "article_img_url",
           ]);
         });
-      })
-      .catch((err) => {
-        if (err) throw err;
       });
   });
 });
@@ -77,9 +82,6 @@ describe("GET /api/users", () => {
             "avatar_url",
           ]);
         });
-      })
-      .catch((err) => {
-        if (err) throw err;
       });
   });
 });
@@ -108,21 +110,24 @@ describe("GET /api/articles/:article_id", () => {
         expect(typeof article.created_at).toBe("string");
         expect(typeof article.votes).toBe("number");
         expect(typeof article.article_img_url).toBe("string");
-      })
-      .catch((err) => {
-        if (err) throw err;
       });
   });
   test("404: Article does not exist", () => {
     const article_id = 2000;
     return request(app)
       .get(`/api/articles/${article_id}`)
-      .then(({ status, body: { message } }) => {
-        expect(status).toBe(404);
-        expect(message).toBe("Article not found");
-      })
-      .catch((err) => {
-        if (err) throw err;
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article Not Found");
+      });
+  });
+  test("400: Wrong input data for article_id", () => {
+    const article_id = "not-an-id";
+    return request(app)
+      .get(`/api/articles/${article_id}`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
       });
   });
 });
@@ -144,21 +149,24 @@ describe("GET /api/articles/:article_id/comments", () => {
             "created_at",
           ]);
         });
-      })
-      .catch((err) => {
-        if (err) throw err;
       });
   });
   test("404: No comments found", () => {
     const article_id = 2000;
     return request(app)
       .get(`/api/articles/${article_id}/comments`)
-      .then(({ status, body: { message } }) => {
-        expect(status).toBe(404);
-        expect(message).toBe("No comments not found");
-      })
-      .catch((err) => {
-        if (err) throw err;
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No Comments found for this article");
+      });
+  });
+  test("400: Wrong input data for article_id", () => {
+    const article_id = "not-an-id";
+    return request(app)
+      .get(`/api/articles/${article_id}/comments`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
       });
   });
 });

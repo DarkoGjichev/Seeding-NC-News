@@ -1,15 +1,14 @@
 const fetchArticleById = require("../models/article-by-id.models");
 
-const getArticleById = (req, res) => {
+const getArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  fetchArticleById(article_id).then((article_array) => {
-    if (article_array.length === 1) {
-      const article = article_array[0];
+  fetchArticleById(article_id)
+    .then((article) => {
       res.status(200).send({ article });
-    } else {
-      res.status(404).send({ message: "Article not found" });
-    }
-  });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 module.exports = getArticleById;

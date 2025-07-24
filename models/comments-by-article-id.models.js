@@ -7,7 +7,12 @@ const fetchCommentsByArticleId = (article_id) => {
       [article_id]
     )
     .then(({ rows: comments }) => {
-      console.log(comments);
+      if (comments.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No Comments found for this article",
+        });
+      }
       return comments;
     });
 };
