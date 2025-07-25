@@ -2,11 +2,15 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 const getAllTopics = require("./controllers/topics.controllers.js");
-const getAllArticles = require("./controllers/articles.controllers.js");
+const {
+  getAllArticles,
+  getArticleById,
+} = require("./controllers/articles.controllers.js");
 const getAllUsers = require("./controllers/users.controllers.js");
-const getArticleById = require("./controllers/article-by-id.controllers.js");
-const getCommentsByArticleId = require("./controllers/comments-by-article-id.controllers.js");
-const addNewComment = require("./controllers/add-new-comment.controllers.js");
+const {
+  getCommentsByArticleId,
+  addNewComment,
+} = require("./controllers/comments.controllers.js");
 
 app.get("/api/topics", getAllTopics);
 app.get("/api/articles", getAllArticles);
