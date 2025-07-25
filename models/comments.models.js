@@ -11,12 +11,11 @@ const fetchCommentsByArticleId = ({ article_id }) => {
     });
 };
 
-const attachNewComment = (article_id, newComment) => {
-  const formatednewComment = newComment.map((comment) => {
-    return [comment.username, comment.body];
-  });
-  const author = formatednewComment[0][0];
-  const body = formatednewComment[0][1];
+const attachNewComment = (article_id, author, body) => {
+  console.log(author);
+  if (author === undefined || typeof author !== "string") {
+    return Promise.reject({ status: 400, msg: "Bad Request" });
+  }
   return db
     .query(
       "INSERT INTO comments (article_id, author, body) VALUES ($1, $2, $3)",

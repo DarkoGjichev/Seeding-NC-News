@@ -203,6 +203,33 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(postedComment.comment_id).toBe(19);
         expect(postedComment.article_id).toBe(1);
         expect(postedComment.body).toBe("Small text goes here...");
+        expect(postedComment.votes).toBe(0);
+        expect(postedComment.author).toBe("butter_bridge");
+      });
+  });
+  test("400: Comment body does not contain correct fields", () => {
+    const article_id = 1;
+    const newComment = {};
+    return request(app)
+      .post(`/api/articles/${article_id}/comments`)
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
+      });
+  });
+  test("400: Comment body contains correct fields but value of field is invalid", () => {
+    const article_id = 1;
+    const newComment = {
+      username: 1,
+      body: true,
+    };
+    return request(app)
+      .post(`/api/articles/${article_id}/comments`)
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
       });
   });
 });

@@ -15,8 +15,8 @@ const getCommentsByArticleId = (req, res) => {
 
 const addNewComment = (req, res) => {
   const { article_id } = req.params;
-  const sentComment = req.body;
-  return attachNewComment(article_id, [sentComment]).then((postedComment) => {
+  const { username, body } = req.body;
+  return attachNewComment(article_id, username, body).then((postedComment) => {
     res.status(201).send({ postedComment });
   });
 };
