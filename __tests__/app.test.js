@@ -134,7 +134,7 @@ describe("GET /api/articles/:article_id", () => {
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
-  test("200: Returns an object with the key of article and the value of an article object", () => {
+  test("200: Returns an array with objects with the key of article and the value of an article object", () => {
     const article_id = 1;
     return request(app)
       .get(`/api/articles/${article_id}/comments`)
@@ -152,13 +152,21 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
-  test("404: No comments found", () => {
+  test("200: Returns an empty array when a request is made for article_id that exists but has no associated comments", () => {
+    const article_id = 7;
+    return request(app)
+      .get(`/api/articles/${article_id}/comments`)
+      .then(({ body: { comments } }) => {
+        expect(comments).toEqual([]);
+      });
+  });
+  test("404: Article_id does not exist", () => {
     const article_id = 2000;
     return request(app)
       .get(`/api/articles/${article_id}/comments`)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("No Comments found for this article");
+        expect(body.msg).toBe("Article Not Found");
       });
   });
   test("400: Wrong input data for article_id", () => {
