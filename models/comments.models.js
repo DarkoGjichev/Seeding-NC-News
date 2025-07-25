@@ -12,20 +12,14 @@ const fetchCommentsByArticleId = ({ article_id }) => {
 };
 
 const attachNewComment = (article_id, author, body) => {
-  console.log(author);
   if (author === undefined || typeof author !== "string") {
     return Promise.reject({ status: 400, msg: "Bad Request" });
   }
   return db
     .query(
-      "INSERT INTO comments (article_id, author, body) VALUES ($1, $2, $3)",
+      "INSERT INTO comments (article_id, author, body) VALUES ($1, $2, $3) RETURNING *",
       [article_id, author, body]
     )
-    .then(() => {
-      return db.query(
-        "SELECT * FROM comments WHERE body = 'Small text goes here...'"
-      );
-    })
     .then(({ rows }) => {
       const postedComment = rows[0];
       return postedComment;
