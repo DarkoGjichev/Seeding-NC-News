@@ -1,10 +1,12 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
+
 const getAllTopics = require("./controllers/topics.controllers.js");
 const {
   getAllArticles,
   getArticleById,
+  updateVotesById,
 } = require("./controllers/articles.controllers.js");
 const getAllUsers = require("./controllers/users.controllers.js");
 const {
@@ -19,6 +21,8 @@ app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.post("/api/articles/:article_id/comments", addNewComment);
+
+app.patch("/api/articles/:article_id", updateVotesById);
 
 app.use((req, res) => {
   res.status(404).send({ msg: "Path Not Found" });

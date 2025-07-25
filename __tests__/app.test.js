@@ -246,4 +246,86 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Article Not Found");
       });
   });
+  test("404: Wrong input type for article_id", () => {
+    const article_id = "not-an-id";
+    const newComment = {
+      username: "butter_bridge",
+      body: "Small text goes here...",
+    };
+    return request(app)
+      .post(`/api/articles/${article_id}/comments`)
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("202: Updates votes on an article by article_id", () => {
+    const article_id = 1;
+    const newVotes = { inc_votes: 10 };
+    return request(app)
+      .patch(`/api/articles/${article_id}`)
+      .send(newVotes)
+      .expect(202)
+      .then(({ body: { article } }) => {
+        expect(Object.keys(article)).toEqual([
+          "article_id",
+          "title",
+          "topic",
+          "author",
+          "body",
+          "created_at",
+          "votes",
+          "article_img_url",
+        ]);
+        expect(article.votes).toBe(110);
+      });
+  });
+  test("404: Article_id does not exist", () => {
+    const article_id = 1000;
+    const newVotes = { inc_votes: 10 };
+    return request(app)
+      .patch(`/api/articles/${article_id}`)
+      .send(newVotes)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article Not Found");
+      });
+  });
+  test("400: Wrong input type for article_id", () => {
+    const article_id = "not-an-id";
+    const newVotes = { inc_votes: 10 };
+    return request(app)
+      .patch(`/api/articles/${article_id}`)
+      .send(newVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+  test("400: Wrong request with a body that does not contain the correct fields", () => {
+    const article_id = 1;
+    const newVotes = {};
+    return request(app)
+      .patch(`/api/articles/${article_id}`)
+      .send(newVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+  test("400: Value of a field for votes is invalid", () => {
+    const article_id = 1;
+    const newVotes = { inc_votes: "word" };
+    return request(app)
+      .patch(`/api/articles/${article_id}`)
+      .send(newVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
 });
