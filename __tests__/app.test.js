@@ -232,4 +232,18 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(msg).toBe("Bad Request");
       });
   });
+  test("404: Article_id does not exist", () => {
+    const article_id = 2000;
+    const newComment = {
+      username: "butter_bridge",
+      body: "Small text goes here...",
+    };
+    return request(app)
+      .post(`/api/articles/${article_id}/comments`)
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article Not Found");
+      });
+  });
 });

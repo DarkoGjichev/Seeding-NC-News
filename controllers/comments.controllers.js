@@ -15,9 +15,13 @@ const getCommentsByArticleId = (req, res) => {
 
 const addNewComment = (req, res) => {
   const { article_id } = req.params;
-  const { username, body } = req.body;
-  return attachNewComment(article_id, username, body).then((postedComment) => {
-    res.status(201).send({ postedComment });
+  return fetchArticleById(article_id).then(() => {
+    const { username, body } = req.body;
+    return attachNewComment(article_id, username, body).then(
+      (postedComment) => {
+        res.status(201).send({ postedComment });
+      }
+    );
   });
 };
 
