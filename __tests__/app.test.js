@@ -93,16 +93,6 @@ describe("GET /api/articles/:article_id", () => {
     return request(app)
       .get(`/api/articles/${article_id}`)
       .then(({ body: { article } }) => {
-        expect(Object.keys(article)).toEqual([
-          "article_id",
-          "title",
-          "topic",
-          "author",
-          "body",
-          "created_at",
-          "votes",
-          "article_img_url",
-        ]);
         expect(typeof article.article_id).toBe("number");
         expect(typeof article.title).toBe("string");
         expect(typeof article.topic).toBe("string");
@@ -451,6 +441,45 @@ describe("GET /api/articles?topic=", () => {
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Not Found");
+      });
+  });
+});
+
+describe("GET api/articles/:article_id(comment_count)", () => {
+  test("200: Returns an article with count of all the comments associated with it", () => {
+    const article_id = 1;
+    return request(app)
+      .get(`/api/articles/${article_id}`)
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.comment_count).toBe(11);
+      });
+  });
+  test("200: Returns an article with no comments associated with it", () => {
+    const article_id = 13;
+    return request(app)
+      .get(`/api/articles/${article_id}`)
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.comment_count).toBe(0);
+      });
+  });
+  test("404: Article does not exist", () => {
+    const article_id = 2000;
+    return request(app)
+      .get(`/api/articles/${article_id}`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article Not Found");
+      });
+  });
+  test("400: Wrong input data for article_id", () => {
+    const article_id = "not-an-id";
+    return request(app)
+      .get(`/api/articles/${article_id}`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
       });
   });
 });
