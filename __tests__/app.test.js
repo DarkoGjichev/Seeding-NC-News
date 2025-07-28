@@ -329,3 +329,28 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Deletes a comment", () => {
+    const comment_id = 1;
+    return request(app).delete(`/api/comments/${comment_id}`).expect(201);
+  });
+  test("404: Comment does not exists", () => {
+    const comment_id = 1000;
+    return request(app)
+      .delete(`/api/comments/${comment_id}`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Comment not found");
+      });
+  });
+  test("400: Referencing an invalid ID", () => {
+    const comment_id = "not-an-id";
+    return request(app)
+      .delete(`/api/comments/${comment_id}`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+});

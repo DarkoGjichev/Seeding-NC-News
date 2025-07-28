@@ -11,6 +11,17 @@ const fetchCommentsByArticleId = ({ article_id }) => {
     });
 };
 
+const fetchCommentById = (comment_id) => {
+  return db
+    .query("SELECT * FROM comments WHERE comment_id = $1", [comment_id])
+    .then(({ rows: comment }) => {
+      if (comment.length === 0) {
+        return Promise.reject({ status: 404, msg: "Comment not found" });
+      }
+      return comment[0];
+    });
+};
+
 const attachNewComment = (article_id, author, body) => {
   if (author === undefined || typeof author !== "string") {
     return Promise.reject({ status: 400, msg: "Bad Request" });
@@ -26,4 +37,13 @@ const attachNewComment = (article_id, author, body) => {
     });
 };
 
-module.exports = { fetchCommentsByArticleId, attachNewComment };
+const removeComment = (comment_id) => {
+  return db.query("DELETE FROM comments WHERE comment_id = $1", [comment_id]);
+};
+
+module.exports = {
+  fetchCommentsByArticleId,
+  attachNewComment,
+  removeComment,
+  fetchCommentById,
+};

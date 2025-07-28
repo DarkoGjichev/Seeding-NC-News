@@ -2,6 +2,8 @@ const { fetchArticleById } = require("../models/articles.models.js");
 const {
   fetchCommentsByArticleId,
   attachNewComment,
+  removeComment,
+  fetchCommentById,
 } = require("../models/comments.models.js");
 
 const getCommentsByArticleId = (req, res) => {
@@ -25,4 +27,13 @@ const addNewComment = (req, res) => {
   });
 };
 
-module.exports = { getCommentsByArticleId, addNewComment };
+const deleteComment = (req, res) => {
+  const { comment_id } = req.params;
+  return fetchCommentById(comment_id).then(({ comment_id }) => {
+    return removeComment(comment_id).then(() => {
+      res.status(201).send();
+    });
+  });
+};
+
+module.exports = { getCommentsByArticleId, addNewComment, deleteComment };
