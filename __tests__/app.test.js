@@ -354,3 +354,70 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
   });
 });
+
+describe("GET /api/articles?sort_by=", () => {
+  test("200: Returns an array with objects/articles sorted by title", () => {
+    const sortBy = "title";
+    return request(app)
+      .get(`/api/articles?sort_by=${sortBy}`)
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(13);
+        expect(articles[0].title).toBe("Z");
+        articles.forEach((article) => {
+          expect(Object.keys(article)).toEqual([
+            "article_id",
+            "title",
+            "topic",
+            "author",
+            "created_at",
+            "votes",
+            "article_img_url",
+            "comment_count",
+          ]);
+        });
+      });
+  });
+  test("200: Returns an array with objects/articles sorted by title in ascending order", () => {
+    const sortBy = "title";
+    const orderBy = "ASC";
+    return request(app)
+      .get(`/api/articles?sort_by=${sortBy}&order_by=${orderBy}`)
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(13);
+        expect(articles[0].title).toBe("A");
+        articles.forEach((article) => {
+          expect(Object.keys(article)).toEqual([
+            "article_id",
+            "title",
+            "topic",
+            "author",
+            "created_at",
+            "votes",
+            "article_img_url",
+            "comment_count",
+          ]);
+        });
+      });
+  });
+  test("404: Collumn for sorting does not exists", () => {
+    const sortBy = "not-a-collumn";
+    return request(app)
+      .get(`/api/articles?sort_by=${sortBy}`)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid Input");
+      });
+  });
+  test("404: Not valid way of ordering table", () => {
+    const sortBy = "title";
+    const orderBy = "SRC";
+    return request(app)
+      .get(`/api/articles?sort_by=${sortBy}&order_by=${orderBy}`)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid Input");
+      });
+  });
+});

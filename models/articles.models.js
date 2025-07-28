@@ -1,9 +1,29 @@
 const db = require("../db/connection.js");
 
-const fetchAllArticles = () => {
+const fetchAllArticles = (sort_by, order_by) => {
+  const orderBy = sort_by || "created_at";
+  const sortBy = order_by || "DESC";
+  const allowedInputsForSorting = [
+    "article_id",
+    "title",
+    "topic",
+    "author",
+    "body",
+    "created_at",
+    "votes",
+    "article_img_url",
+    "comment_count",
+  ];
+  const allowedInputsForOrdering = ["ASC", "DESC"];
+  if (!allowedInputsForSorting.includes(orderBy)) {
+    return Promise.reject({ status: 404, msg: "Invalid Input" });
+  }
+  if (!allowedInputsForOrdering.includes(sortBy)) {
+    return Promise.reject({ status: 404, msg: "Invalid Input" });
+  }
   return db
     .query(
-      "SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, COUNT(c.comment_id) AS comment_count FROM articles a LEFT JOIN comments c ON c.article_id = a.article_id GROUP BY a.article_id ORDER BY a.created_at DESC;"
+      `SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, COUNT(c.comment_id) AS comment_count FROM articles a LEFT JOIN comments c ON c.article_id = a.article_id GROUP BY a.article_id ORDER BY a.${orderBy} ${sortBy};`
     )
     .then(({ rows: articles }) => {
       return articles;
