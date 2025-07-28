@@ -1,8 +1,6 @@
 const db = require("../db/connection.js");
 
-const fetchAllArticles = (sort_by, order_by) => {
-  const orderBy = sort_by || "created_at";
-  const sortBy = order_by || "DESC";
+const fetchAllArticles = (sort_by = "created_at", order = "DESC") => {
   const allowedInputsForSorting = [
     "article_id",
     "title",
@@ -15,15 +13,15 @@ const fetchAllArticles = (sort_by, order_by) => {
     "comment_count",
   ];
   const allowedInputsForOrdering = ["ASC", "DESC"];
-  if (!allowedInputsForSorting.includes(orderBy)) {
+  if (!allowedInputsForSorting.includes(sort_by)) {
     return Promise.reject({ status: 404, msg: "Invalid Input" });
   }
-  if (!allowedInputsForOrdering.includes(sortBy)) {
+  if (!allowedInputsForOrdering.includes(order)) {
     return Promise.reject({ status: 404, msg: "Invalid Input" });
   }
   return db
     .query(
-      `SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, COUNT(c.comment_id) AS comment_count FROM articles a LEFT JOIN comments c ON c.article_id = a.article_id GROUP BY a.article_id ORDER BY a.${orderBy} ${sortBy};`
+      `SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, COUNT(c.comment_id)::INT AS comment_count FROM articles a LEFT JOIN comments c ON c.article_id = a.article_id GROUP BY a.article_id ORDER BY ${sort_by} ${order};`
     )
     .then(({ rows: articles }) => {
       return articles;
