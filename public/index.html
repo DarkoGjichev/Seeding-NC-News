@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <h1>NC News</h1>
+        <ul>
+            <li><a href="">Introduction</a></li>
+            <li><a href="">Errors</a></li>
+            <li><a href="">/api/topics</a></li>
+            <li><a href="">/api/articles</a></li>
+            <li><a href="">/api/users</a></li>
+            <li><a href="">/api/articles/:article_id</a></li>
+            <li><a href="">/api/articles/:article_id/comments</a></li>
+            <li><a href="">/api/comments/:comment_id</a></li>
+        </ul>
+    </header>
+    <main>
+        <section>
+            <h2>Introduction</h2>
+            <p>The NC News API is designed around REST principles, making it easy to use and understand. It features
+                clear, resource-based URLs, accepts form-encoded request bodies, returns JSON responses, and uses
+                standard HTTP methods and status codes.</p>
+            <p>The API provides access to data related to news articles, users, comments, and article topics.</p>
+            <p>You can also try the API in test mode, allowing you to experiment safely without affecting live data.</p>
+        </section>
+        <section>
+            <h2>Errors</h2>
+            <p>The NC News API uses standard HTTP status codes to indicate the success or failure of a request. When
+                something goes wrong, the API returns a clear error message in the response body, along with a relevant
+                status code.</p>
+            <p>Common error responses include:</p>
+            <h3><strong>400 Bad Request:</strong> The request was invalid or missing required data.</h3>
+            <p>Usually happens when inserting wrong data type or not including all the information for the query</p>
+            <h3><strong>404 Not Found:</strong> The requested resource doesn't exist.</h3>
+            <p>Mostly happens when searching for id of article,id of comment or a username that doesn't exists</p>
+            <h3><strong>500 Internal Server Error:</strong> Something went wrong on our end.</h3>
+            </ul>
+            <p>These responses are designed to help you quickly understand what went wrong and how to fix it.</p>
+        </section>
+        <section>
+            <h2>Paths</h2>
+            <h3>GET /api/topics</h3>
+            <p>Returns 200 and all topics.</p>
+            <pre>
+{
+    "slug": "coding",
+    "description": "Code is love, code is life",
+    "img_url": ""
+}
+            </pre>
+            <h3>GET /api/articles</h3>
+            <p>Returns 200 and all articles with information about the articles, datestamp and image.</p>
+            <pre>
+{
+    "article_id": 34,
+    "title": "The Notorious MSG’s Unlikely Formula For Success",
+    "topic": "cooking",
+    "author": "grumpy19",
+    "created_at": "2020-11-22T11:13:00.000Z",
+    "votes": 0,
+    "article_img_url": "https://article-image",
+    "comment_count": 11
+}
+            </pre>
+            <h4>Some possible queries you can add to this path are:</h4>
+            <ul>
+                <li>/api/articles?sort_by=[collumn_name] - To sort the articles, by default it is sorted by the
+                    datestamp in
+                    descending order</li>
+                <li>/api/articles?topic=[topic] - To filter through articles by topic</li>
+            </ul>
+            <h3>GET /api/users</h3>
+            <p>Returns code 200 and all users.</p>
+            <pre>
+{
+    "username": "tickle122",
+    "name": "Tom Tickle",
+    "avatar_url": "https://avatar-url"
+}
+            </pre>
+            <h3>GET /api/articles/:article_id</h3>
+            <p>Returns code 200 and the article with given ID number</p>
+            <h3>PATCH /api/articles/:article_id</h3>
+            <pre>
+{
+    "article_id": 8,
+    "title": "Express.js: A Server-Side JavaScript Framework",
+    "topic": "coding",
+    "author": "cooljmessy",
+    "body": "You’re probably aware that JavaScript ...",
+    "created_at": "2020-10-05T22:23:00.000Z",
+    "votes": 0,
+    "article_img_url": "https://article-img-url",
+    "comment_count": 7
+}
+            </pre>
+            <p>Returns 202 and returns the updated votes</p>
+            <h3>GET /api/articles/:article_id/comments</h3>
+            <p>Returns code 200 and all comments for selected article. </p>
+            <h3>POST /api/articles/:article_id/comments</h3>
+            <p>post new comment if you are signed in and returns 201 with the new comment</p>
+            <h3>DELETE /api/comments/:comment_id</h3>
+            <p>Deletes selected comment and returns code:204</p>
+        </section>
+    </main>
+    <footer></footer>
+</body>
+
+</html>

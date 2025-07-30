@@ -15,6 +15,7 @@ const {
   deleteComment,
 } = require("./controllers/comments.controllers.js");
 
+app.use("/api", express.static("public"));
 app.get("/api/topics", getAllTopics);
 app.get("/api/articles", getAllArticles);
 app.get("/api/users", getAllUsers);
@@ -48,5 +49,4 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {
   res.status(500).send({ msg: "Internal Server Error" });
 });
-
 module.exports = app;
