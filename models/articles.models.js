@@ -13,7 +13,7 @@ const fetchAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
     "comment_count",
   ];
   const orderKeys = ["ASC", "DESC"];
-  const topicKeys = ["mitch", "cats", "paper"];
+  const topicKeys = ["mitch", "cats", "paper", "coding", "football", "cooking"];
   order = order.toUpperCase();
   if (!sortKeys.includes(sort_by) || !orderKeys.includes(order)) {
     return Promise.reject({ status: 404, msg: "Invalid Input" });
