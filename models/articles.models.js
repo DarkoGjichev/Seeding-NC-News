@@ -14,6 +14,7 @@ const fetchAllArticles = (sort_by = "created_at", order = "DESC", filter) => {
   ];
 
   const allowedInputsForOrdering = ["ASC", "DESC"];
+  order = order.toUpperCase();
   const existingTopics = ["mitch", "cats", "paper"];
   if (
     !allowedInputsForSorting.includes(sort_by) ||
