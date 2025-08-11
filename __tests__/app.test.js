@@ -416,7 +416,7 @@ describe("GET /api/articles?topic=", () => {
   test("200: Return an array with objects/articles filtered by a topic", () => {
     const topic = "mitch";
     return request(app)
-      .get(`/api/articles?filter=${topic}`)
+      .get(`/api/articles?topic=${topic}`)
       .expect(200)
       .then(({ body: { articles } }) => {
         expect(articles).toHaveLength(12);
@@ -428,7 +428,7 @@ describe("GET /api/articles?topic=", () => {
   test("200: Return an empty array when passed a topic that does not references any articles", () => {
     const topic = "paper";
     return request(app)
-      .get(`/api/articles?filter=${topic}`)
+      .get(`/api/articles?topic=${topic}`)
       .expect(200)
       .then(({ body: { articles } }) => {
         expect(articles).toHaveLength(0);
@@ -437,7 +437,7 @@ describe("GET /api/articles?topic=", () => {
   test("404: Topic does not exists", () => {
     const topic = "not-a-topic";
     return request(app)
-      .get(`/api/articles?filter=${topic}`)
+      .get(`/api/articles?topic=${topic}`)
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Not Found");

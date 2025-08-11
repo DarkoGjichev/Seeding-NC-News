@@ -1,7 +1,7 @@
 const db = require("../db/connection.js");
 
-const fetchAllArticles = (sort_by = "created_at", order = "DESC", filter) => {
-  const allowedInputsForSorting = [
+const fetchAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
+  const sortKeys = [
     "article_id",
     "title",
     "topic",
@@ -12,23 +12,19 @@ const fetchAllArticles = (sort_by = "created_at", order = "DESC", filter) => {
     "article_img_url",
     "comment_count",
   ];
-
-  const allowedInputsForOrdering = ["ASC", "DESC"];
+  const orderKeys = ["ASC", "DESC"];
+  const topicKeys = ["mitch", "cats", "paper"];
   order = order.toUpperCase();
-  const existingTopics = ["mitch", "cats", "paper"];
-  if (
-    !allowedInputsForSorting.includes(sort_by) ||
-    !allowedInputsForOrdering.includes(order)
-  ) {
+  if (!sortKeys.includes(sort_by) || !orderKeys.includes(order)) {
     return Promise.reject({ status: 404, msg: "Invalid Input" });
   }
 
   let queryStr = `SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, COUNT(c.comment_id)::INT AS comment_count FROM articles a LEFT JOIN comments c ON c.article_id = a.article_id`;
-  if (filter) {
-    if (!existingTopics.includes(filter)) {
+  if (topic) {
+    if (!topicKeys.includes(topic)) {
       return Promise.reject({ status: 404, msg: "Not Found" });
     }
-    queryStr += ` WHERE a.topic = '${filter}'`;
+    queryStr += ` WHERE a.topic = '${topic}'`;
   }
   queryStr += ` GROUP BY a.article_id ORDER BY ${sort_by} ${order};`;
   return db.query(queryStr).then(({ rows: articles }) => {
