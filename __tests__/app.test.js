@@ -372,7 +372,7 @@ describe("GET /api/articles?sort_by=", () => {
     const sortBy = "title";
     const orderBy = "ASC";
     return request(app)
-      .get(`/api/articles?sort_by=${sortBy}&order_by=${orderBy}`)
+      .get(`/api/articles?sort_by=${sortBy}&order=${orderBy}`)
       .expect(200)
       .then(({ body: { articles } }) => {
         expect(articles).toHaveLength(13);
@@ -404,7 +404,7 @@ describe("GET /api/articles?sort_by=", () => {
     const sortBy = "title";
     const orderBy = "SRC";
     return request(app)
-      .get(`/api/articles?sort_by=${sortBy}&order_by=${orderBy}`)
+      .get(`/api/articles?sort_by=${sortBy}&order=${orderBy}`)
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Invalid Input");
