@@ -4,113 +4,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>NC News API Documentation</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+
     <header>
-        <h1>NC News</h1>
-        <ul>
-            <li><a href="">Introduction</a></li>
-            <li><a href="">Errors</a></li>
-            <li><a href="">/api/topics</a></li>
-            <li><a href="">/api/articles</a></li>
-            <li><a href="">/api/users</a></li>
-            <li><a href="">/api/articles/:article_id</a></li>
-            <li><a href="">/api/articles/:article_id/comments</a></li>
-            <li><a href="">/api/comments/:comment_id</a></li>
-        </ul>
+        <h1>NC News API</h1>
+        <nav>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#topics">Topics</a></li>
+                <li><a href="#users">Users</a></li>
+                <li><a href="#articles">Articles</a></li>
+                <li><a href="#comments">Comments</a></li>
+                <li><a href="#votes">Votes</a></li>
+                <li><a href="#errors">Errors</a></li>
+            </ul>
+        </nav>
     </header>
+
     <main>
-        <section>
+        <section id="introduction">
             <h2>Introduction</h2>
             <p>The NC News API is designed around REST principles, making it easy to use and understand. It features
                 clear, resource-based URLs, accepts form-encoded request bodies, returns JSON responses, and uses
                 standard HTTP methods and status codes.</p>
-            <p>The API provides access to data related to news articles, users, comments, and article topics.</p>
-            <p>You can also try the API in test mode, allowing you to experiment safely without affecting live data.</p>
+
+            <p>The API provides access to data related to news articles, users, comments, and article topics. You can
+                use it to retrieve lists of articles, fetch specific articles by ID, read and post comments, and explore
+                topics and users.</p>
+
+            <p>You can also try the API in <strong>test mode</strong>, allowing you to experiment safely without
+                affecting live data.</p>
+
+            <p><a href="https://seeding-nc-news-3h3w.onrender.com/api/" target="_blank" class="external-link">Visit the
+                    hosted API</a></p>
         </section>
-        <section>
-            <h2>Errors</h2>
-            <p>The NC News API uses standard HTTP status codes to indicate the success or failure of a request. When
-                something goes wrong, the API returns a clear error message in the response body, along with a relevant
-                status code.</p>
-            <p>Common error responses include:</p>
-            <h3><strong>400 Bad Request:</strong> The request was invalid or missing required data.</h3>
-            <p>Usually happens when inserting wrong data type or not including all the information for the query</p>
-            <h3><strong>404 Not Found:</strong> The requested resource doesn't exist.</h3>
-            <p>Mostly happens when searching for id of article,id of comment or a username that doesn't exists</p>
-            <h3><strong>500 Internal Server Error:</strong> Something went wrong on our end.</h3>
-            </ul>
-            <p>These responses are designed to help you quickly understand what went wrong and how to fix it.</p>
-        </section>
-        <section>
-            <h2>Paths</h2>
-            <h3>GET /api/topics</h3>
-            <p>Returns 200 and all topics.</p>
+
+        <section id="topics">
+            <h2>Topics</h2>
+            <p><code>GET /api/topics</code> - Returns a list of all topics.</p>
+            <p>Try it live: <a href="https://seeding-nc-news-3h3w.onrender.com/api/topics" target="_blank"
+                    class="external-link">/api/topics</a></p>
             <pre>
-{
+[
+  {
     "slug": "coding",
-    "description": "Code is love, code is life",
-    "img_url": ""
-}
-            </pre>
-            <h3>GET /api/articles</h3>
-            <p>Returns 200 and all articles with information about the articles, datestamp and image.</p>
+    "description": "All about coding",
+    "img_url": "https://example.com/coding.png"
+  }
+]
+    </pre>
+        </section>
+
+        <section id="users">
+            <h2>Users</h2>
+            <p><code>GET /api/users</code> - Returns a list of all users.</p>
+            <p>Try it live: <a href="https://seeding-nc-news-3h3w.onrender.com/api/users" target="_blank"
+                    class="external-link">/api/users</a></p>
+            <pre>
+[
+  {
+    "username": "johndoe",
+    "name": "John Doe",
+    "avatar_url": "https://example.com/johndoe.png"
+  }
+]
+    </pre>
+        </section>
+
+        <section id="articles">
+            <h2>Articles</h2>
+            <p><code>GET /api/articles</code> - Returns all articles. Supports <code>topic</code>, <code>sort_by</code>,
+                <code>order</code> queries.
+            </p>
+            <p>Live endpoint: <a href="https://seeding-nc-news-3h3w.onrender.com/api/articles" target="_blank"
+                    class="external-link">/api/articles</a></p>
+
+            <p><code>GET /api/articles/:article_id</code> - Returns a single article including comment count.</p>
+            <p>Example: <a href="https://seeding-nc-news-3h3w.onrender.com/api/articles/1" target="_blank"
+                    class="external-link">/api/articles/1</a></p>
+
             <pre>
 {
-    "article_id": 34,
-    "title": "The Notorious MSG’s Unlikely Formula For Success",
-    "topic": "cooking",
-    "author": "grumpy19",
-    "created_at": "2020-11-22T11:13:00.000Z",
+  "article_id": 1,
+  "title": "Learning JavaScript",
+  "topic": "coding",
+  "author": "johndoe",
+  "body": "JavaScript is great!",
+  "created_at": "2025-08-25T12:00:00.000Z",
+  "votes": 5,
+  "article_img_url": "https://example.com/js.png",
+  "comment_count": 2
+}
+    </pre>
+        </section>
+
+        <section id="comments">
+            <h2>Comments</h2>
+
+            <p><code>GET /api/articles/:article_id/comments</code> - Returns all comments for an article.</p>
+            <p>Example: <a href="https://seeding-nc-news-3h3w.onrender.com/api/articles/1/comments" target="_blank"
+                    class="external-link">/api/articles/1/comments</a></p>
+            <pre>
+[
+  {
+    "comment_id": 2,
+    "author": "janedoe",
+    "body": "Great article!",
     "votes": 0,
-    "article_img_url": "https://article-image",
-    "comment_count": 11
-}
-            </pre>
-            <h4>Some possible queries you can add to this path are:</h4>
-            <ul>
-                <li>/api/articles?sort_by=[collumn_name] - To sort the articles, by default it is sorted by the
-                    datestamp in
-                    descending order</li>
-                <li>/api/articles?topic=[topic] - To filter through articles by topic</li>
-            </ul>
-            <h3>GET /api/users</h3>
-            <p>Returns code 200 and all users.</p>
+    "created_at": "2025-08-25T14:00:00.000Z"
+  }
+]
+  </pre>
+
+            <p><code>POST /api/articles/:article_id/comments</code> - Adds a new comment.</p>
+            <p>Request Body:</p>
             <pre>
 {
-    "username": "tickle122",
-    "name": "Tom Tickle",
-    "avatar_url": "https://avatar-url"
+  "username": "janedoe",
+  "body": "This is my comment"
 }
-            </pre>
-            <h3>GET /api/articles/:article_id</h3>
-            <p>Returns code 200 and the article with given ID number</p>
-            <h3>PATCH /api/articles/:article_id</h3>
+  </pre>
+            <p>Example live endpoint: <a href="https://seeding-nc-news-3h3w.onrender.com/api/articles/1/comments"
+                    target="_blank" class="external-link">/api/articles/1/comments</a></p>
+
+            <p><code>DELETE /api/comments/:comment_id</code> - Deletes a comment.</p>
+            <p>Example live endpoint: <a href="https://seeding-nc-news-3h3w.onrender.com/api/comments/2" target="_blank"
+                    class="external-link">/api/comments/2</a></p>
+        </section>
+
+        <section id="votes">
+            <h2>Votes</h2>
+            <p><code>PATCH /api/articles/:article_id</code> - Update vote count for an article.</p>
+            <p>Example: <a href="https://seeding-nc-news-3h3w.onrender.com/api/articles/1" target="_blank"
+                    class="external-link">/api/articles/1</a></p>
+
             <pre>
+Request Body:
 {
-    "article_id": 8,
-    "title": "Express.js: A Server-Side JavaScript Framework",
-    "topic": "coding",
-    "author": "cooljmessy",
-    "body": "You’re probably aware that JavaScript ...",
-    "created_at": "2020-10-05T22:23:00.000Z",
-    "votes": 0,
-    "article_img_url": "https://article-img-url",
-    "comment_count": 7
+  "inc_votes": 1
 }
-            </pre>
-            <p>Returns 202 and returns the updated votes</p>
-            <h3>GET /api/articles/:article_id/comments</h3>
-            <p>Returns code 200 and all comments for selected article. </p>
-            <h3>POST /api/articles/:article_id/comments</h3>
-            <p>post new comment if you are signed in and returns 201 with the new comment</p>
-            <h3>DELETE /api/comments/:comment_id</h3>
-            <p>Deletes selected comment and returns code:204</p>
+    </pre>
+        </section>
+
+        <section id="errors">
+            <h2>Errors</h2>
+            <p>The NC News API uses standard HTTP status codes to indicate success or failure. When something goes
+                wrong, the API returns a JSON response with a relevant status code and error message.</p>
+
+            <h3>400 Bad Request</h3>
+            <p>The request was invalid or missing required data. Usually happens when inserting the wrong data type or
+                missing information.</p>
+            <pre>
+Status: 400 Bad Request
+Response Body:
+{
+  "status": 400,
+  "message": "Bad Request"
+}
+    </pre>
+
+            <h3>404 Not Found</h3>
+            <p>The requested resource does not exist. Often happens when searching for an article ID, comment ID, or
+                username that doesn’t exist.</p>
+            <pre>
+Status: 404 Not Found
+Response Body:
+{
+  "status": 404,
+  "message": "Article not found"
+}
+    </pre>
+
+            <h3>500 Internal Server Error</h3>
+            <p>Something went wrong on the server side.</p>
+            <pre>
+Status: 500 Internal Server Error
+Response Body:
+{
+  "status": 500,
+  "message": "Internal Server Error: Please try again later"
+}
+    </pre>
         </section>
     </main>
-    <footer></footer>
+
 </body>
 
 </html>
