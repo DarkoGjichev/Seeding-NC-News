@@ -1,9 +1,7 @@
-const tableQueries = `DROP TABLE IF EXISTS comments;
-
+const tableQueries = `DROP TABLE IF EXISTS emojis;
+    DROP TABLE IF EXISTS comments;
     DROP TABLE IF EXISTS articles;
-
     DROP TABLE IF EXISTS topics;
-
     DROP TABLE IF EXISTS users;
 
     CREATE TABLE topics (
@@ -28,7 +26,7 @@ const tableQueries = `DROP TABLE IF EXISTS comments;
         votes INT DEFAULT 0,
         article_img_url VARCHAR(1000)
         );
-        
+
     CREATE TABLE comments (
         comment_id SERIAL PRIMARY KEY,
         article_id INT REFERENCES articles(article_id),
@@ -36,6 +34,13 @@ const tableQueries = `DROP TABLE IF EXISTS comments;
         votes INT DEFAULT 0,
         author VARCHAR REFERENCES users(username),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )`;
+        );
+
+    CREATE TABLE emojis (
+        emoji_id SERIAL PRIMARY KEY,
+        slug VARCHAR NOT NULL UNIQUE,
+        symbol VARCHAR NOT NULL,
+        description VARCHAR
+        );`;
 
 module.exports = tableQueries;

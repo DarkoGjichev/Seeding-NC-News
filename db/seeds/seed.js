@@ -3,7 +3,7 @@ var format = require("pg-format");
 const { convertTimestampToDate, createLookupRef } = require("./utils.js");
 const tableQueries = require("./create-tables-queries.js");
 
-const seed = ({ topicData, userData, articleData, commentData }) => {
+const seed = ({ topicData, userData, articleData, commentData, emojiData }) => {
   return db
     .query(tableQueries)
     .then(() => {
@@ -68,6 +68,18 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
         formattedData
       );
       return db.query(commentsData);
+    })
+    .then(() => {
+      const formattedData = emojiData.map((emoji) => {
+        return [emoji.slug, emoji.symbol, emoji.description];
+      });
+      const emojisData = format(
+        `INSERT INTO emojis (slug, symbol, description)
+     VALUES %L
+     RETURNING *;`,
+        formattedData
+      );
+      return db.query(emojisData);
     })
     .catch((err) => {
       console.error(err);
