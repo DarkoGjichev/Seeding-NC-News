@@ -16,6 +16,7 @@ const {
   addNewComment,
   deleteComment,
 } = require("./controllers/comments.controllers.js");
+const { getAllEmojis } = require("./controllers/emojis.controllers.js");
 
 app.use("/api", express.static("public"));
 app.get("/api/topics", getAllTopics);
@@ -23,6 +24,7 @@ app.get("/api/articles", getAllArticles);
 app.get("/api/users", getAllUsers);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+app.get("/api/emojis", getAllEmojis);
 
 app.post("/api/articles/:article_id/comments", addNewComment);
 
