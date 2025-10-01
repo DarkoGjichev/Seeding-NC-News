@@ -483,3 +483,22 @@ describe("GET api/articles/:article_id(comment_count)", () => {
       });
   });
 });
+
+describe("GET /api/emojis", () => {
+  test("200: Returns an object with the key of emojis and the value of an array of emoji objects.", () => {
+    return request(app)
+      .get("/api/emojis")
+      .expect(200)
+      .then(({ body: { emojis } }) => {
+        expect(emojis).toHaveLength(6);
+        emojis.forEach((emoji) => {
+          expect(Object.keys(emoji)).toEqual([
+            "emoji_id",
+            "slug",
+            "symbol",
+            "description",
+          ]);
+        });
+      });
+  });
+});
